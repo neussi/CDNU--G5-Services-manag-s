@@ -4,55 +4,155 @@
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{listings}
+\usepackage{color}
 
+% Configuration visuelle du Beamer
 \usetheme{Madrid}
 \usecolortheme{whale}
 
-% Supprimer la barre de navigation
+% Suppression des symboles de navigation inutiles
 \setbeamertemplate{navigation symbols}{}
 
+% Définition des couleurs pour les codes sources
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{codebackground}{rgb}{0.95,0.95,0.95}
+
+\lstset{
+  backgroundcolor=\color{codebackground},
+  basicstyle=\tiny\ttfamily,
+  breaklines=true,
+  captionpos=b,
+  commentstyle=\color{mygreen},
+  keywordstyle=\color{blue},
+  stringstyle=\color{mymauve},
+  frame=single,
+  keepspaces=true,
+  language=bash,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2
+}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% MÉTADONNÉES DE LA PRÉSENTATION
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 \title[Cloud CDNU - Lot 5]{Projet National de Cloud des CDNUs}
-\subtitle{Lot 5 : Services Managés (Stockage, Base de Données et Registre)}
-\author[Groupe 5]{Présenté par le Groupe 5}
-\institute[UY1]{Université de Yaoundé I}
-\date[Mai 2026]{Soutenance Technique - Année Académique 2025/2026}
+\subtitle{Soutenance Technique - Lot 5 : Services Managés}
+\author[Groupe 5]{Présenté par l'Équipe du Groupe 5}
+\institute[UY1]{Université de Yaoundé I \\ Département d'Informatique}
+\date[Mai 2026]{Année Académique 2025/2026}
 
 \begin{document}
 
-% Slide de Titre
+% Slide 1 : Titre principal
 \begin{frame}
     \titlepage
 \end{frame}
 
-% Slide 1 : Composition de l'Équipe
-\begin{frame}{Membres du Groupe 5}
-    \begin{block}{Équipe de Travail du Lot 5}
+% Slide 2 : Table des Matières / Plan
+\begin{frame}{Plan de la Présentation}
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{Partie I : Introduction \& Contexte}
+                \begin{itemize}
+                    \item Contexte National CDNU
+                    \item Problématiques \& Objectifs
+                    \item Périmètre du Lot 5
+                    \item Schéma d'Architecture Globale
+                \end{itemize}
+            \end{block}
+            \begin{block}{Partie II : Module Base de Données}
+                \begin{itemize}
+                    \item RDS PostgreSQL 15.18
+                    \item Stockage GP3 \& Sécurité
+                    \item AWS Secrets Manager
+                \end{itemize>
+            \end{block}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{block}{Partie III : Stockage \& ECR}
+                \begin{itemize}
+                    \item Structure Buckets S3 par CDNU
+                    \item Optimisation FinOps \& Cycle de vie
+                    \item Registre de conteneurs ECR
+                \end{itemize}
+            \end{block}
+            \begin{block}{Partie IV : Exploitation \& Sécurité}
+                \begin{itemize}
+                    \item Intégrations Inter-Lots
+                    \item Manuel d'Exploitation (IaC)
+                    \item Build \& Push Docker de l'API
+                    \item Sécurité Git \& .gitignore
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Slide 3 : Composition de l'Équipe de Travail
+\begin{frame}{Composition du Groupe de Travail 5}
+    \begin{block}{Membres du Lot 5}
         \begin{itemize}
-            \item \textbf{NEUSSI NJIETCHEU PATRICE EUGENE} (21T2894) - Responsable de Lot
-            \item \textbf{NDONKOU FRANCK} (21T2254) - Ingénieur Infrastructure Cloud
-            \item \textbf{NDOMBOU KAMDEM} (21T2552) - Ingénieur DevOps et automatisation
-            \item \textbf{FOTSING ENGOULOU SIMON GAETAN} (21Q2024) - Ingénieur Sécurité et audit
-            \item \textbf{FANDJA DE TCHOUA ANNAELLE ORLANE} - Développeur IaC
+            \item \textbf{NEUSSI NJIETCHEU PATRICE EUGENE} (21T2894) \\ \textit{Responsable de Lot, Ingénieur DevOps et Automatisation}
+            \item \textbf{NDONKOU FRANCK} (21T2254) \\ \textit{Ingénieur Cloud Infrastructure \& AWS Core}
+            \item \textbf{NDOMBOU KAMDEM} (21T2552) \\ \textit{Ingénieur Système, Configuration \& GitOps}
+            \item \textbf{FOTSING ENGOULOU SIMON GAETAN} (21Q2024) \\ \textit{Ingénieur Sécurité, IAM \& Chiffrement}
+            \item \textbf{FANDJA DE TCHOUA ANNAELLE ORLANE} \\ \textit{Concepteur de l'Infrastructure as Code (IaC) Terraform}
         \end{itemize}
     \end{block}
 \end{frame}
 
-% Slide 2 : Contexte et Objectifs du Projet
-\begin{frame}{Contexte et Objectifs du Projet}
+% Slide 4 : Contexte du Projet National CDNU
+\begin{frame}{Contexte du Projet National CDNU}
     \begin{itemize}
-        \item \textbf{Cadre National} : Interconnexion des 11 Centres de Développement du Numérique Universitaire (CDNU) du Cameroun sur un cloud central.
-        \item \textbf{Objectif du Lot 5} : Fournir le socle de stockage, de persistance de données, et le registre pour les conteneurs applicatifs de la plateforme.
-        \item \textbf{Contraintes Majeures} :
-        \begin{itemize}
-            \item Sécurité maximale et isolation complète des données.
-            \item Optimisation rigoureuse des coûts récurrents (FinOps).
-            \item Non-exposition des secrets d'accès sur les espaces publics (GitHub).
-        \end{itemize}
+        \item \textbf{Transition Digitale Académique} : Déploiement de 11 Centres de Développement du Numérique Universitaire (CDNU) à l'échelle nationale du Cameroun.
+        \item \textbf{Infrastructure Souveraine} : Hébergement centralisé, sécurisé et répliqué sur Amazon Web Services (AWS) en région Europe (Francfort) \texttt{eu-central-1}.
+        \item \textbf{Modèle Collaboratif} : Division du projet national en 10 lots d'études interconnectés travaillant en synergie pour livrer la plateforme finale.
     \end{itemize}
 \end{frame}
 
-% Slide 2b : Schéma d'Architecture Globale du Lot 5
-\begin{frame}{Architecture Globale du Lot 5}
+% Slide 5 : Problématiques et Objectifs Généraux
+\begin{frame}{Problématiques et Objectifs Généraux}
+    \begin{block}{Défis majeurs à relever}
+        \begin{itemize}
+            \item \textbf{Pérénnité des données} : Assurer un stockage d'objets persistant et chiffré pour l'ensemble des universités camerounaises.
+            \item \textbf{Sécurisation applicative} : Empêcher toute exposition de mots de passe en clair dans le code ou sur GitHub.
+            \item \textbf{Maîtrise budgétaire} : Appliquer une stricte stratégie FinOps pour diviser par 4 la facture cloud récursive du stockage de données.
+            \item \textbf{Sauvegarde unifiée} : Automatiser la continuité d'activité sans interruption de service.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% Slide 6 : Périmètre Fonctionnel du Lot 5
+\begin{frame}{Périmètre Fonctionnel du Lot 5}
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{Persistance \& Registres}
+                \begin{itemize}
+                    \item \textbf{RDS PostgreSQL} : Base de données SQL centralisée.
+                    \item \textbf{Amazon ECR} : Registre privé de conteneurs pour héberger l'API.
+                    \item \textbf{AWS Secrets Manager} : Coffre-fort de clés d'accès.
+                \end{itemize>
+            \end{block}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{block}{Sauvegarde \& Stockage}
+                \begin{itemize}
+                    \item \textbf{Buckets Amazon S3} : Stockage unifié par CDNU.
+                    \item \textbf{AWS Backup} : Plan national de sauvegarde inaltérable.
+                    \item \textbf{AWS KMS} : Clés de chiffrement souveraines.
+                \end{itemize>
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Slide 7 : Schéma d'Architecture Globale
+\begin{frame}{Architecture Globale de l'Infrastructure}
     \begin{figure}
         \centering
         \includegraphics[width=0.78\textwidth]{images/g5_architecture_diagram.png}
@@ -60,120 +160,643 @@
     \end{figure}
 \end{frame}
 
-% Slide 3 : Amazon RDS PostgreSQL
-\begin{frame}{Amazon RDS PostgreSQL - Persistance Relationnelle}
-    \begin{block}{Spécifications Techniques Déployées}
+% Slide 8 : RDS PostgreSQL - Conception et Dimensionnement
+\begin{frame}{RDS PostgreSQL - Conception et Dimensionnement}
+    \begin{block}{Spécifications Techniques du Coeur SQL}
         \begin{itemize}
-            \item \textbf{Moteur de base de données} : PostgreSQL version 15.18.
-            \item \textbf{Dimensionnement} : Instance de classe \texttt{db.t3.micro} avec 20 Go de stockage de type GP3 (3000 IOPS de base).
-            \item \textbf{Isolation réseau} : Intégration dans des sous-réseaux privés via un Subnet Group dédié.
-            \item \textbf{Chiffrement} : Chiffrement intégral au repos activé à l'aide d'une clé KMS unique.
+            \item \textbf{Moteur standard} : PostgreSQL version **15.18** stable.
+            \item \textbf{Classe d'instance de test} : \texttt{db.t3.micro} (extensible à la volée vers des instances de production de classe \texttt{db.m6g} à base de processeurs économes Graviton).
+            \item \textbf{Provisioning Stockage} : Allocation initiale de 20 Go extensible automatiquement à chaud jusqu'à 100 Go grâce à l'autoscaling disque AWS RDS.
         \end{itemize}
     \end{block}
-    
-    \begin{exampleblock}{Sécurisation des identifiants}
-        Le mot de passe d'administration SQL est généré dynamiquement et stocké de manière sécurisée dans AWS Secrets Manager.
-    \end{exampleblock}
 \end{frame}
 
-% Slide 4 : Stratégie FinOps et Stockage S3
-\begin{frame}{Stratégie FinOps et Stockage Amazon S3}
+% Slide 9 : Code IaC - Provisionnement de la Base RDS (main.tf)
+\begin{frame}[fragile]{Code IaC - Provisionnement de la Base RDS}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "aws_db_instance" "main" {
+  identifier        = "cdnu-postgres"
+  engine            = "postgres"
+  engine_version    = "15.18"
+  instance_class    = "db.t3.micro"
+  allocated_storage = 20
+  storage_type      = "gp3"
+  storage_encrypted = true
+  kms_key_id        = aws_kms_key.rds.arn
+  db_name           = "cdnu_db"
+  username          = "dbadmin"
+  password          = var.master_password
+  port              = 5432
+  multi_az          = true
+  publicly_accessible  = false
+  db_subnet_group_name = aws_db_subnet_group.main.name
+  vpc_security_group_ids = var.vpc_security_group_ids
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 10 : Code IaC - Parameter Group RDS PostgreSQL
+\begin{frame}[fragile]{Code IaC - Parameter Group RDS PostgreSQL}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "aws_db_parameter_group" "postgres" {
+  name   = "cdnu-postgres-params"
+  family = "postgres15"
+  parameter {
+    name  = "shared_preload_libraries"
+    value = "pg_stat_statements"
+  }
+  parameter {
+    name  = "log_statement"
+    value = "all"
+  }
+  parameter {
+    name  = "log_min_duration_statement"
+    value = "1000"
+  }
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 11 : Code IaC - Clé de Chiffrement KMS Dédiée
+\begin{frame}[fragile]{Code IaC - Clé de Chiffrement KMS Dédiée}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "aws_kms_key" "rds" {
+  description             = "KMS key pour encryption RDS cdnu-cloud-g5"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+  tags = {
+    Name = "cdnu-cloud-g5-rds-kms"
+  }
+}
+
+resource "aws_kms_alias" "rds" {
+  name          = "alias/cdnu-cloud-g5-rds"
+  target_key_id = aws_kms_key.rds.key_id
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 12 : RDS PostgreSQL - Stockage GP3 \& Performances
+\begin{frame}{RDS PostgreSQL - Stockage GP3 \& Performances}
     \begin{itemize}
-        \item \textbf{Infrastructure} : Création de 22 buckets S3 (11 buckets de données principaux + 11 buckets de logs d'audit).
-        \item \textbf{Sécurité} : Block Public Access activé, et transit HTTPS obligatoire.
-        \item \textbf{Cycle de vie des données (FinOps)} :
+        \item \textbf{Type de disque} : General Purpose SSD de type **GP3**.
+        \item \textbf{Garanties de performances} :
+        \begin{itemize}
+            \item **3000 IOPS** garantis de base sans frais supplémentaires.
+            \item Débit stable de **125 Mo/s** linéaire.
+            \item Permet d'isoler les performances d'I/O de la capacité globale du disque (contrairement aux volumes GP2 dépendants de la taille).
+        \end{itemize}
+        \item \textbf{Avantage} : Excellent temps de réponse lors des pics d'accès.
     \end{itemize}
-    
+\end{frame}
+
+% Slide 13 : RDS PostgreSQL - Sécurité et Isolation Réseau
+\begin{frame}{RDS PostgreSQL - Sécurité et Isolation Réseau}
+    \begin{block}{Isolation stricte au niveau Réseau}
+        \begin{itemize}
+            \item \textbf{Subnet Group Privé} : Déploiement exclusif dans des sous-réseaux privés internes sans point d'accès ou d'IP publique Internet.
+            \item \textbf{Sécurisation par Groupe de Sécurité} : 
+            \begin{itemize}
+                \item Restriction du protocole TCP sur le port **5432**.
+                \item Seuls les flux provenant des groupes de sécurité de l'API ECS Fargate (Groupe 6) ou du bastion réseau (Groupe 4) sont acceptés.
+                \item Tout autre trafic interne ou externe est systématiquement bloqué.
+            \end{itemize>
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% Slide 14 : RDS PostgreSQL - Chiffrement et Souveraineté (KMS)
+\begin{frame}{RDS PostgreSQL - Chiffrement et Souveraineté (KMS)}
+    \begin{itemize}
+        \item \textbf{Chiffrement au repos (At Rest)} : Toutes les tables SQL, index, fichiers de transactions de données et snapshots de sauvegarde sont chiffrés.
+        \item \textbf{Algorithme appliqué} : Standard industriel robuste **AES-256**.
+        \item \textbf{Clé KMS Dédiée} : Création et gestion autonome d'une clé KMS de chiffrement souveraine pour le projet national, assurant que même AWS ne peut lire les données stockées physiques sans autorisation.
+    \end{itemize}
+\end{frame}
+
+% Slide 15 : AWS Secrets Manager - Gestion des Mots de Passe
+\begin{frame}{AWS Secrets Manager - Gestion des Mots de Passe}
+    \begin{block}{Cinématique de Sécurisation des Identifiants}
+        \begin{itemize}
+            \item \textbf{Génération Aléatoire IaC} : Terraform génère un mot de passe d'administration robuste lors du premier déploiement sans l'exposer à l'écran.
+            \item \textbf{Stockage Chiffré} : Le mot de passe est directement écrit dans **AWS Secrets Manager** sous clé KMS.
+            \item \textbf{Consommation Applicative} : L'API ECS (Groupe 6) interroge l'API Secrets Manager via son rôle d'exécution IAM pour lire le secret à la volée, évitant tout mot de passe en clair dans le code.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% Slide 16 : Code IaC - AWS Secrets Manager (security.tf)
+\begin{frame}[fragile]{Code IaC - AWS Secrets Manager}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "aws_secretsmanager_secret" "rds_credentials" {
+  name                    = "cdnu-cloud-g5/rds/master-credentials"
+  description             = "Credentials master pour RDS PostgreSQL"
+  kms_key_id              = aws_kms_key.rds.id
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "rds_credentials" {
+  secret_id     = aws_secretsmanager_secret.rds_credentials.id
+  secret_string = jsonencode({
+    username = var.master_username
+    password = var.master_password
+    engine   = "postgres"
+    host     = aws_db_instance.main.address
+    port     = 5432
+    dbname   = "cdnu_db"
+  })
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 17 : S3 Buckets - Architecture Documentaire CDNUs
+\begin{frame}{S3 Buckets - Architecture Documentaire CDNUs}
+    \begin{itemize}
+        \item \textbf{Modélisation de Stockage Unifié} : Provisioning automatique de 22 buckets Amazon S3 (2 par CDNU).
+        \item \textbf{Double Bucket Structure} :
+        \begin{itemize}
+            \item **Bucket Principal** : Reçoit les cours, thèses, vidéos, documents administratifs de chaque CDNU (ex: \texttt{cdnu-cloud-g5-yaounde-2d425742}).
+            \item **Bucket de Logs** : Enregistre de manière inaltérable et isolée toutes les requêtes réseau d'audit (ex: \texttt{cdnu-cloud-g5-yaounde-logs-2d425742}).
+        \end{itemize>
+    \end{itemize}
+\end{frame}
+
+% Slide 18 : Code IaC - Création de Bucket S3 Principal (storage/main.tf)
+\begin{frame}[fragile]{Code IaC - Création du Bucket S3}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "random_id" "bucket_suffix" {
+  byte_length = 4
+}
+
+resource "aws_s3_bucket" "main" {
+  bucket        = "cdnu-cloud-g5-${var.cdnu_name}-${random_id.bucket_suffix.hex}"
+  force_destroy = true
+  tags = {
+    Name        = "${var.cdnu_name}-bucket"
+    Environment = "production"
+  }
+}
+
+resource "aws_s3_bucket_versioning" "main" {
+  bucket = aws_s3_bucket.main.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 19 : Code IaC - Bucket S3 de Logs et Logging activé
+\begin{frame}[fragile]{Code IaC - Logs de Diagnostics S3}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "aws_s3_bucket" "logs" {
+  bucket = "cdnu-cloud-g5-${var.cdnu_name}-logs-${random_id.bucket_suffix.hex}"
+  tags = {
+    Name = "${var.cdnu_name}-logs-bucket"
+    Type = "Logs"
+  }
+}
+
+resource "aws_s3_bucket_logging" "main" {
+  bucket        = aws_s3_bucket.main.id
+  target_bucket = aws_s3_bucket.logs.id
+  target_prefix = "${var.cdnu_name}/"
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 20 : Code IaC - Forcer HTTPS sur S3 via Bucket Policy
+\begin{frame}[fragile]{Code IaC - Forcer HTTPS sur S3 via Bucket Policy}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+data "aws_iam_policy_document" "bucket_policy" {
+  statement {
+    sid    = "DenyInsecureTransport"
+    effect = "Deny"
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+    actions = ["s3:*"]
+    resources = [
+      aws_s3_bucket.main.arn,
+      "${aws_s3_bucket.main.arn}/*"
+    ]
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
+    }
+  }
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 21 : Code IaC - Application de la S3 Bucket Policy
+\begin{frame}[fragile]{Code IaC - Application de la S3 Bucket Policy}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "aws_s3_bucket_policy" "main" {
+  bucket = aws_s3_bucket.main.id
+  policy = data.aws_iam_policy_document.bucket_policy.json
+}
+
+resource "aws_s3_bucket_public_access_block" "main" {
+  bucket = aws_s3_bucket.main.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 22 : Code IaC - Configuration CORS du module Stockage
+\begin{frame}[fragile]{Code IaC - Configuration CORS du module Stockage}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "aws_s3_bucket_cors_configuration" "main" {
+  bucket = aws_s3_bucket.main.id
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "PUT", "POST", "DELETE"]
+    allowed_origins = var.cors_allowed_origins
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 23 : S3 Buckets - Sécurisation des Accès Réseau
+\begin{frame}{S3 Buckets - Sécurisation des Accès Réseau}
+    \begin{block}{Contrôles de Sécurité Rigoureux}
+        \begin{itemize}
+            \item \textbf{Block Public Access} : Option activée globalement empêchant l'exposition publique accidentelle de fichiers.
+            \item \textbf{Versioning Actif} : Sauvegarde automatique de l'historique des fichiers en cas d'altération ou d'attaque par ransomware.
+            \item \textbf{Bucket Policy d'Exclusion HTTP} : Exigence absolue du transit sécurisé HTTPS TLS 1.2+. Les requêtes non chiffrées sont rejetées à la source.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% Slide 24 : S3 Buckets - Configuration CORS \& Upload Direct
+\begin{frame}{S3 Buckets - Configuration CORS \& Upload Direct}
+    \begin{itemize}
+        \item \textbf{Problématique} : Le passage des fichiers volumineux (vidéos de cours) par le serveur d'API surcharge le réseau applicatif.
+        \item \textbf{Solution CORS intégrée} : Le module configure des règles Cross-Origin Resource Sharing (CORS) autorisées pour les domaines universitaires nationaux.
+        \item \textbf{Mécanisme Direct Upload} : Les navigateurs des étudiants peuvent téléverser directement des fichiers volumineux de manière sécurisée vers S3 après obtention d'une URL pré-signée de l'API.
+    \end{itemize}
+\end{frame}
+
+% Slide 25 : S3 Buckets - Stratégie FinOps \& Cycle de Vie
+\begin{frame}{S3 Buckets - Stratégie FinOps \& Cycle de Vie}
+    \begin{block}{Politique de cycle de vie (Lifecycle Rules)}
+        \begin{itemize}
+            \item \textbf{0 à 30 jours (S3 Standard)} : Données actives fréquemment consultées.
+            \item \textbf{31 à 120 jours (Glacier Instant Retrieval)} : Passage des données tièdes avec accès immédiat en millisecondes (**80\% d'économie**).
+            \item \textbf{121 à 210 jours (Glacier Flexible Retrieval)} : Archivage avec récupération en 3 à 5 heures (**90\% d'économie**).
+            \item \textbf{Après 210 jours (Glacier Deep Archive)} : Archivage de longue durée avec récupération en 12 heures (**95\% d'économie**).
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% Slide 26 : Code IaC - S3 Intelligent-Tiering
+\begin{frame}[fragile]{Code IaC - S3 Intelligent-Tiering}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "aws_s3_bucket_intelligent_tiering_configuration" "main" {
+  bucket = aws_s3_bucket.main.id
+  name   = "EntireBucket"
+  status = "Enabled"
+
+  tiering {
+    access_tier = "ARCHIVE_ACCESS"
+    days        = 90
+  }
+  tiering {
+    access_tier = "DEEP_ARCHIVE_ACCESS"
+    days        = 180
+  }
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 27 : S3 Buckets - Modélisation Économique FinOps
+\begin{frame}{S3 Buckets - Modélisation Économique FinOps}
     \begin{table}
         \centering
-        \caption{Transitions automatiques et réduction de coût S3}
-        \begin{tabular}{llr}
+        \caption{Estimation financière comparative pour 1 To stocké sur un an}
+        \begin{tabular}{llrr}
             \toprule
-            \textbf{Période (jours)} & \textbf{Classe S3 de transition} & \textbf{Économie mensuelle} \\
+            \textbf{Période (jours)} & \textbf{Classe S3 active} & \textbf{Coût mensuel / To} & \textbf{Gains accumulés} \\
             \midrule
-            0 à 30 & S3 Standard & 0\% (Phase active) \\
-            31 à 120 & S3 Glacier Instant Retrieval & 80\% d'économie \\
-            121 à 210 & S3 Glacier Flexible Retrieval & 90\% d'économie \\
-            Après 210 & S3 Glacier Deep Archive & 95\% d'économie \\
+            0 à 30 & S3 Standard & 23,00 USD & Base 100\% \\
+            31 à 120 & Glacier Instant IR & 4,00 USD & 82,6\% d'économie \\
+            121 à 210 & Glacier Flexible & 3,60 USD & 84,3\% d'économie \\
+            Après 210 & Glacier Deep Archive & 0,99 USD & 95,7\% d'économie \\
             \bottomrule
         \end{tabular}
     \end{table}
+    \begin{block}{Optimisations Annexes}
+        Nettoyage automatique des Multipart Uploads incomplets après 7 jours et expiration automatique des fichiers temporaires.
+    \end{block}
 \end{frame}
 
-% Slide 5 : Amazon ECR (Registre de conteneurs)
-\begin{frame}{Amazon ECR - Gestion des Artefacts Applicatifs}
-    \begin{block}{Caractéristiques du Registre de Conteneurs Privé}
+% Slide 28 : Amazon ECR - Registre de Conteneurs Privé
+\begin{frame}{Amazon ECR - Registre de Conteneurs Privé}
+    \begin{itemize}
+        \item \textbf{Hébergement sécurisé} : Registre d'images Docker privé et chiffré par KMS pour stocker l'API nationale.
+        \item \textbf{Intégration CI/CD} : Point d'ancrage pour les pipelines d'intégration et de déploiement continus du Groupe 6.
+        \item \textbf{Haute disponibilité} : Image stockée et répliquée dans la région d'exécution.
+    \end{itemize}
+\end{frame}
+
+% Slide 29 : Code IaC - ECR Registry et Scan on Push
+\begin{frame}[fragile]{Code IaC - ECR Registry et Scan on Push}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "aws_ecr_repository" "api" {
+  name                 = "cdnu-cloud-g5-api"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+  encryption_configuration {
+    encryption_type = "KMS"
+  }
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 30 : Code IaC - ECR Lifecycle Policy (ecr.tf)
+\begin{frame}[fragile]{Code IaC - ECR Lifecycle Policy}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "aws_ecr_lifecycle_policy" "api" {
+  repository = aws_ecr_repository.api.name
+
+  policy = jsonencode({
+    rules = [
+      {
+        rulePriority = 1
+        description  = "Supprimer les conteneurs sans tag apres 7 jours"
+        selection = {
+          tagStatus   = "untagged"
+          countType   = "sinceImagePushed"
+          countUnit   = "days"
+          countNumber = 7
+        }
+        action = {
+          type = "expire"
+        }
+      }
+    ]
+  })
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 31 : Amazon ECR - Sécurité \& Scan de Vulnérabilités
+\begin{frame}{Amazon ECR - Sécurité \& Scan de Vulnérabilités}
+    \begin{block}{Scan Automatique à chaque PUSH}
         \begin{itemize}
-            \item \textbf{Scan au push} : Analyse automatique de l'image Docker à chaque téléversement pour détecter les failles de sécurité CVE.
-            \item \textbf{Alarmes automatiques} : Déclenchement d'alertes en cas de détection de faille de sécurité critique.
-            \item \textbf{Cycle de vie des images} :
-            \begin{itemize}
-                \item Conservation des 10 dernières images tagguées sous le format \texttt{v*}.
-                \item Suppression automatique des conteneurs non taggués après 7 jours d'inactivité pour libérer de l'espace facturable.
-            \end{itemize}
+            \item \textbf{Scan on Push} : Dès qu'un développeur pousse une image de conteneur, ECR analyse le système de fichiers pour lister les vulnérabilités CVE connues.
+            \item \textbf{Alarmes CloudWatch ECR} : Configuration d'une alerte si une faille de sécurité jugée *CRITIQUE* ou *HIGH* est détectée dans l'image de production.
         \end{itemize}
     \end{block}
 \end{frame}
 
-% Slide 6 : Intégration Inter-Groupes
-\begin{frame}{Intégration Globale dans l'Écosystème CDNU}
+% Slide 32 : Amazon ECR - Cycle de Vie Intelligent
+\begin{frame}{Amazon ECR - Cycle de Vie Intelligent}
     \begin{itemize}
-        \item \textbf{Avec le Groupe 4 (Réseau)} : Consommation des sous-réseaux privés pour associer l'instance RDS et filtrage IP du Groupe de Sécurité sur les flux SQL.
-        \item \textbf{Avec le Groupe 6 (API / ECS)} : Utilisation du registre ECR par l'API pour se déployer sur ECS Fargate, et lecture du secret dans Secrets Manager.
-        \item \textbf{Avec le Groupe 7 (Sécurité)} : Fourniture des ARNs des buckets S3 pour la création de politiques de moindre privilège.
-        \item \textbf{Avec le Groupe 8 (Supervision)} : Transmission des alarmes CloudWatch (espace disque saturé, connexions SQL trop élevées, vulnérabilités ECR).
+        \item \textbf{Problématique} : Le build répétitif d'images Docker en cours de développement remplit l'espace de stockage facturable d'ECR.
+        \item \textbf{Politique de nettoyage automatique (Lifecycle Policy)} :
+        \begin{itemize}
+            \item Conservation stricte des **10 dernières images tagguées** de production (\texttt{v*}).
+            \item Suppression automatique des images sans tag (*untagged*) après **7 jours**.
+        \end{itemize}
+        \item \textbf{Gain} : Évite l'accumulation d'images intermédiaires inutiles.
     \end{itemize}
 \end{frame}
 
-% Slide 7 : Manuel d'Exploitation (Commandes de Tests)
-\begin{frame}[fragile]{Manuel d'Exploitation et Démonstration en Direct}
-    \begin{block}{Commandes clés à exécuter dans le répertoire G5}
+% Slide 33 : Code IaC - AWS Backup (backup.tf)
+\begin{frame}[fragile]{Code IaC - AWS Backup Plan}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "aws_backup_plan" "rds" {
+  name = "cdnu-cloud-g5-rds-backup-plan"
+
+  rule {
+    rule_name         = "daily-backup"
+    target_vault_name = aws_backup_vault.rds.name
+    schedule          = "cron(0 3 * * ? *)"
+    lifecycle {
+      delete_after = 30
+    }
+  }
+
+  rule {
+    rule_name         = "weekly-backup"
+    target_vault_name = aws_backup_vault.rds.name
+    schedule          = "cron(0 4 ? * SUN *)"
+    lifecycle {
+      delete_after = 90
+    }
+  }
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 34 : AWS Backup - Politique Nationale de Sauvegarde
+\begin{frame}{AWS Backup - Politique Nationale de Sauvegarde}
+    \begin{block}{Règles de clichés inaltérables}
+        \begin{itemize}
+            \item \textbf{Sauvegarde Quotidienne} : Snapshot automatique déclenché à 03h00 (UTC), conservé **7 jours** dans le coffre.
+            \item \textbf{Sauvegarde Hebdomadaire} : Snapshot complet déclenché le dimanche à 04h00 (UTC), conservé **4 semaines** (28 jours).
+            \item \textbf{Coffre de Sauvegarde sécurisé} : Création du coffre `aws_backup_vault` protégé par sa propre clé KMS isolée.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% Slide 35 : Code IaC - Alarme CloudWatch de Connexions RDS
+\begin{frame}[fragile]{Code IaC - Alarme CloudWatch RDS Connexions}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "aws_cloudwatch_metric_alarm" "database_connections" {
+  alarm_name          = "cdnu-cloud-g5-rds-high-connections"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "DatabaseConnections"
+  namespace           = "AWS/RDS"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "80"
+  alarm_description   = "Alerte si trop de connexions concurrentes"
+  dimensions = {
+    DBInstanceIdentifier = aws_db_instance.main.id
+  }
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 36 : Code IaC - Alarme CloudWatch CPU RDS
+\begin{frame}[fragile]{Code IaC - Alarme CloudWatch RDS CPU}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+resource "aws_cloudwatch_metric_alarm" "database_cpu" {
+  alarm_name          = "cdnu-cloud-g5-rds-high-cpu"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/RDS"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "80"
+  alarm_description   = "Alerte si CPU RDS > 80%"
+  dimensions = {
+    DBInstanceIdentifier = aws_db_instance.main.id
+  }
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 37 : CloudWatch - Supervision \& Alarmes Métriques
+\begin{frame}{CloudWatch - Supervision \& Alarmes Métriques}
+    \begin{itemize}
+        \item \textbf{Supervision Proactive} : 4 alarmes métriques CloudWatch déployées automatiquement.
+    \end{itemize}
+    \begin{table}
+        \centering
+        \begin{tabular}{llr}
+            \toprule
+            \textbf{Métrique RDS} & \textbf{Seuil d'Alerte} & \textbf{Période de validation} \\
+            \midrule
+            Consommation CPU & > 85\% & 5 minutes \\
+            Espace Disque Libre & < 2 Go & 5 minutes \\
+            Connexions SQL Actives & > 80\% & 5 minutes \\
+            Mémoire Vive RAM Libre & < 100 Mo & 5 minutes \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    \begin{exampleblock}{Intégration Supervision}
+        Les alarmes se connectent directement au tableau de bord centralisé du Groupe 8 pour alerter les équipes d'exploitation.
+    \end{exampleblock}
+\end{frame}
+
+% Slide 38 : Intégrations Inter-Lots
+\begin{frame}{Intégrations Inter-Lots dans l'Écosystème}
+    \begin{block}{Interdépendance collaborative des Lots}
+        \begin{itemize}
+            \item \textbf{Groupe 4 (Réseau)} : Raccordement de RDS dans les sous-réseaux privés VPC et gestion du routage réseau.
+            \item \textbf{Groupe 6 (API / ECS)} : Utilisation d'ECR pour récupérer l'image de conteneur de l'API et récupération du mot de passe RDS via Secrets Manager.
+            \item \textbf{Groupe 7 (Sécurité)} : Consommation des ARNs des buckets S3 pour concevoir les profils IAM de moindre privilège.
+            \item \textbf{Groupe 8 (Monitoring)} : Agrégation de nos alertes métriques CloudWatch RDS et ECR.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% Slide 39 : Assurance Sécurité - Protection contre les Fuites
+\begin{frame}{Assurance Sécurité - Protection contre les Fuites}
+    \begin{itemize}
+        \item \textbf{Protection stricte de Git} : Aucun secret ni identifiant AWS ne doit fuiter sur GitHub.
+        \item \textbf{Fichier .gitignore} : Configuré pour exclure de manière absolue :
+        \begin{itemize}
+            \item Les fichiers de clés d'administration AWS (\texttt{cdnu-admin\_accessKeys.csv}).
+            \item Les variables contenant des mots de passe en clair (\texttt{terraform.tfvars}).
+            \item Les fichiers locaux d'état Terraform (\texttt{*.tfstate}).
+            \item La configuration locale du fournisseur (\texttt{.terraform/}).
+        \end{itemize}
+    \end{itemize>
+\end{frame}
+
+% Slide 40 : Manuel d'Exploitation - Initialisation \& Validation
+\begin{frame}[fragile]{Manuel d'Exploitation - Initialisation \& Validation}
+    \begin{block}{Commandes d'initialisation et de test du répertoire G5}
         \begin{lstlisting}[basicstyle=\tiny\ttfamily]
-# Initialisation
-export AWS_ACCESS_KEY_ID="VOTRE_CLÉ_AWS"
-export AWS_SECRET_ACCESS_KEY="VOTRE_SECRET_AWS"
+# 1. Exportation des identifiants administratifs AWS
+export AWS_ACCESS_KEY_ID="AKIAXXXXXXXXXXXXXXXX"
+export AWS_SECRET_ACCESS_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 export AWS_DEFAULT_REGION="eu-central-1"
+
+# 2. Initialisation de Terraform avec reconfiguration du backend S3
 ../bin/terraform init -reconfigure
 
-# Planification et validation
+# 3. Planification à blanc et validation de la syntaxe
 ../bin/terraform plan
-
-# Déploiement de l'infrastructure
-../bin/terraform apply -auto-approve
-
-# Destruction propre pour éviter les coûts
-../bin/terraform destroy -auto-approve
         \end{lstlisting}
     \end{block}
 \end{frame}
 
-% Slide 8 : Sécurité et Protection de l'Infrastructure
-\begin{frame}{Sécurité et Non-exposition des Identifiants}
-    \begin{block}{Mesures appliquées pour protéger le compte AWS}
-        \begin{itemize}
-            \item \textbf{Fichier .gitignore} : Exclusion stricte des fichiers contenant les clés d'administration AWS (\texttt{cdnu-admin\_accessKeys.csv}) et le mot de passe SQL (\texttt{terraform.tfvars}).
-            \item \textbf{Chiffrement} : Utilisation systématique de clés KMS uniques pour chiffrer la base de données relationnelle, le coffre de sauvegarde AWS Backup, et les secrets.
-            \item \textbf{Transport sécurisé} : Toutes les politiques de buckets rejettent explicitement les flux HTTP non sécurisés.
-        \end{itemize}
+% Slide 41 : Code IaC - Terraform Root Outputs (outputs.tf)
+\begin{frame}[fragile]{Code IaC - Terraform Root Outputs}
+    \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
+output "rds_endpoint" {
+  description = "Endpoint de connexion pour la base de donnees PostgreSQL"
+  value       = module.database.endpoint
+}
+
+output "rds_secret_arn" {
+  description = "ARN du secret stocke dans AWS Secrets Manager"
+  value       = module.database.secret_arn
+}
+
+output "ecr_repository_url" {
+  description = "URL du registre de conteneurs ECR pour API"
+  value       = aws_ecr_repository.api.repository_url
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 42 : Manuel d'Exploitation - Déploiement et Nettoyage
+\begin{frame}[fragile]{Manuel d'Exploitation - Déploiement et Nettoyage}
+    \begin{block}{Commandes d'administration des ressources}
+        \begin{lstlisting}[basicstyle=\tiny\ttfamily]
+# 4. Lancement et creation physique de l'infrastructure sur AWS
+../bin/terraform apply -auto-approve
+
+# 5. Destruction propre de toutes les ressources pour eviter la facturation apres soutenance
+../bin/terraform destroy -auto-approve
+        \end{lstlisting}
+    \end{block}
+    \begin{exampleblock}{Statut du Déploiement}
+        L'infrastructure est actuellement opérationnelle sur AWS (179 ressources actives dans la région eu-central-1).
+    \end{exampleblock}
+\end{frame}
+
+% Slide 43 : Manuel d'Exploitation - Vérification de l'État Réel
+\begin{frame}{Manuel d'Exploitation - Vérification de l'État Réel}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.75\textwidth]{images/terraform_state_list.png}
+        \caption{Visualisation de l'état actif des ressources gérées via Terraform}
+    \end{figure}
+\end{frame}
+
+% Slide 44 : Envoi d'un Conteneur Docker Applicatif vers ECR
+\begin{frame}[fragile]{Envoi d'un Conteneur Docker Applicatif vers ECR}
+    \begin{block}{Commandes d'authentification, compilation et push}
+        \begin{lstlisting}[basicstyle=\tiny\ttfamily]
+# 1. Connexion de Docker au registre ECR du Groupe 5
+aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 571600862515.dkr.ecr.eu-central-1.amazonaws.com
+
+# 2. Compilation de l'image locale de l'API
+docker build -t cdnu-cloud-g5-api .
+
+# 3. Étiquetage (Tagging) de l'image sous la version v1.0.0
+docker tag cdnu-cloud-g5-api:latest 571600862515.dkr.ecr.eu-central-1.amazonaws.com/cdnu-cloud-g5-api:v1.0.0
+
+# 4. Envoi (Push) de l'image Docker vers AWS ECR
+docker push 571600862515.dkr.ecr.eu-central-1.amazonaws.com/cdnu-cloud-g5-api:v1.0.0
+        \end{lstlisting}
     \end{block}
 \end{frame}
 
-% Slide 9 : Conclusion
-\begin{frame}{Conclusion}
-    \begin{itemize}
-        \item \textbf{Objectif Atteint} : Le Lot 5 est pleinement opérationnel et déployé avec succès sur AWS (179 ressources actives dans la région eu-central-1).
-        \item \textbf{Résultats} :
+% Slide 45 : Conclusion générale et perspectives
+\begin{frame}{Conclusion Générale}
+    \begin{block}{Bilan Technique du Lot 5}
         \begin{itemize}
-            \item Un stockage S3 unifié et optimisé en coût (FinOps).
-            \item Une persistance relationnelle PostgreSQL 15.18 hautement sécurisée.
-            \item Un registre ECR prêt à accueillir les images de l'API.
+            \item \textbf{Objectif validé} : Les fondations de stockage (S3), base de données (RDS) et registres (ECR) sont déployées et fonctionnelles sur AWS.
+            \item \textbf{Sécurité garantie} : Protection KMS, exclusion des fichiers Git sensibles, utilisation des Secrets Manager.
+            \item \textbf{Optimisé financièrement} : Division par 4 des coûts grâce aux règles de cycle de vie Glacier.
         \end{itemize}
-        \item \textbf{Livrable} : Dépôt GitHub propre, sécurisé et documenté.
-    \end{itemize}
+    \end{block}
     
-    \vspace*{0.5cm}
+    \vspace*{0.4cm}
     \centering
-    \large\bfseries Merci pour votre aimable attention.
+    \large\bfseries Merci pour votre aimable attention. \\ Des questions ?
 \end{frame}
 
 \end{document}

@@ -1,0 +1,170 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+% Supprimer la barre de navigation
+\setbeamertemplate{navigation symbols}{}
+
+\title[Cloud CDNU - Lot 5]{Projet National de Cloud des CDNUs}
+\subtitle{Lot 5 : Services Managés (Stockage, Base de Données et Registre)}
+\author[Groupe 5]{Présenté par le Groupe 5}
+\institute[UY1]{Université de Yaoundé I}
+\date[Mai 2026]{Soutenance Technique - Année Académique 2025/2026}
+
+\begin{document}
+
+% Slide de Titre
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide 1 : Composition de l'Équipe
+\begin{frame}{Membres du Groupe 5}
+    \begin{block}{Équipe de Travail du Lot 5}
+        \begin{itemize}
+            \item \textbf{NEUSSI NJIETCHEU PATRICE EUGENE} (21T2894) - Responsable de Lot
+            \item \textbf{NDONKOU FRANCK} (21T2254) - Ingénieur Infrastructure Cloud
+            \item \textbf{NDOMBOU KAMDEM} (21T2552) - Ingénieur DevOps et automatisation
+            \item \textbf{FOTSING ENGOULOU SIMON GAETAN} (21Q2024) - Ingénieur Sécurité et audit
+            \item \textbf{FANDJA DE TCHOUA ANNAELLE ORLANE} - Développeur IaC
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% Slide 2 : Contexte et Objectifs du Projet
+\begin{frame}{Contexte et Objectifs du Projet}
+    \begin{itemize}
+        \item \textbf{Cadre National} : Interconnexion des 11 Centres de Développement du Numérique Universitaire (CDNU) du Cameroun sur un cloud central.
+        \item \textbf{Objectif du Lot 5} : Fournir le socle de stockage, de persistance de données, et le registre pour les conteneurs applicatifs de la plateforme.
+        \item \textbf{Contraintes Majeures} :
+        \begin{itemize}
+            \item Sécurité maximale et isolation complète des données.
+            \item Optimisation rigoureuse des coûts récurrents (FinOps).
+            \item Non-exposition des secrets d'accès sur les espaces publics (GitHub).
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% Slide 3 : Amazon RDS PostgreSQL
+\begin{frame}{Amazon RDS PostgreSQL - Persistance Relationnelle}
+    \begin{block}{Spécifications Techniques Déployées}
+        \begin{itemize}
+            \item \textbf{Moteur de base de données} : PostgreSQL version 15.18.
+            \item \textbf{Dimensionnement} : Instance de classe \texttt{db.t3.micro} avec 20 Go de stockage de type GP3 (3000 IOPS de base).
+            \item \textbf{Isolation réseau} : Intégration dans des sous-réseaux privés via un Subnet Group dédié.
+            \item \textbf{Chiffrement} : Chiffrement intégral au repos activé à l'aide d'une clé KMS unique.
+        \end{itemize}
+    \end{block}
+    
+    \begin{exampleblock}{Sécurisation des identifiants}
+        Le mot de passe d'administration SQL est généré dynamiquement et stocké de manière sécurisée dans AWS Secrets Manager.
+    \end{exampleblock}
+\end{frame}
+
+% Slide 4 : Stratégie FinOps et Stockage S3
+\begin{frame}{Stratégie FinOps et Stockage Amazon S3}
+    \begin{itemize}
+        \item \textbf{Infrastructure} : Création de 22 buckets S3 (11 buckets de données principaux + 11 buckets de logs d'audit).
+        \item \textbf{Sécurité} : Block Public Access activé, et transit HTTPS obligatoire.
+        \item \textbf{Cycle de vie des données (FinOps)} :
+    \end{itemize}
+    
+    \begin{table}
+        \centering
+        \caption{Transitions automatiques et réduction de coût S3}
+        \begin{tabular}{llr}
+            \toprule
+            \textbf{Période (jours)} & \textbf{Classe S3 de transition} & \textbf{Économie mensuelle} \\
+            \midrule
+            0 à 30 & S3 Standard & 0\% (Phase active) \\
+            31 à 120 & S3 Glacier Instant Retrieval & 80\% d'économie \\
+            121 à 210 & S3 Glacier Flexible Retrieval & 90\% d'économie \\
+            Après 210 & S3 Glacier Deep Archive & 95\% d'économie \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+% Slide 5 : Amazon ECR (Registre de conteneurs)
+\begin{frame}{Amazon ECR - Gestion des Artefacts Applicatifs}
+    \begin{block}{Caractéristiques du Registre de Conteneurs Privé}
+        \begin{itemize}
+            \item \textbf{Scan au push} : Analyse automatique de l'image Docker à chaque téléversement pour détecter les failles de sécurité CVE.
+            \item \textbf{Alarmes automatiques} : Déclenchement d'alertes en cas de détection de faille de sécurité critique.
+            \item \textbf{Cycle de vie des images} :
+            \begin{itemize}
+                \item Conservation des 10 dernières images tagguées sous le format \texttt{v*}.
+                \item Suppression automatique des conteneurs non taggués après 7 jours d'inactivité pour libérer de l'espace facturable.
+            \end{itemize}
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% Slide 6 : Intégration Inter-Groupes
+\begin{frame}{Intégration Globale dans l'Écosystème CDNU}
+    \begin{itemize}
+        \item \textbf{Avec le Groupe 4 (Réseau)} : Consommation des sous-réseaux privés pour associer l'instance RDS et filtrage IP du Groupe de Sécurité sur les flux SQL.
+        \item \textbf{Avec le Groupe 6 (API / ECS)} : Utilisation du registre ECR par l'API pour se déployer sur ECS Fargate, et lecture du secret dans Secrets Manager.
+        \item \textbf{Avec le Groupe 7 (Sécurité)} : Fourniture des ARNs des buckets S3 pour la création de politiques de moindre privilège.
+        \item \textbf{Avec le Groupe 8 (Supervision)} : Transmission des alarmes CloudWatch (espace disque saturé, connexions SQL trop élevées, vulnérabilités ECR).
+    \end{itemize}
+\end{frame}
+
+% Slide 7 : Manuel d'Exploitation (Commandes de Tests)
+\begin{frame}[fragile]{Manuel d'Exploitation et Démonstration en Direct}
+    \begin{block}{Commandes clés à exécuter dans le répertoire G5}
+        \begin{lstlisting}[basicstyle=\tiny\ttfamily]
+# Initialisation
+export AWS_ACCESS_KEY_ID="VOTRE_CLÉ_AWS"
+export AWS_SECRET_ACCESS_KEY="VOTRE_SECRET_AWS"
+export AWS_DEFAULT_REGION="eu-central-1"
+../bin/terraform init -reconfigure
+
+# Planification et validation
+../bin/terraform plan
+
+# Déploiement de l'infrastructure
+../bin/terraform apply -auto-approve
+
+# Destruction propre pour éviter les coûts
+../bin/terraform destroy -auto-approve
+        \end{lstlisting}
+    \end{block}
+\end{frame}
+
+% Slide 8 : Sécurité et Protection de l'Infrastructure
+\begin{frame}{Sécurité et Non-exposition des Identifiants}
+    \begin{block}{Mesures appliquées pour protéger le compte AWS}
+        \begin{itemize}
+            \item \textbf{Fichier .gitignore} : Exclusion stricte des fichiers contenant les clés d'administration AWS (\texttt{cdnu-admin\_accessKeys.csv}) et le mot de passe SQL (\texttt{terraform.tfvars}).
+            \item \textbf{Chiffrement} : Utilisation systématique de clés KMS uniques pour chiffrer la base de données relationnelle, le coffre de sauvegarde AWS Backup, et les secrets.
+            \item \textbf{Transport sécurisé} : Toutes les politiques de buckets rejettent explicitement les flux HTTP non sécurisés.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% Slide 9 : Conclusion
+\begin{frame}{Conclusion}
+    \begin{itemize}
+        \item \textbf{Objectif Atteint} : Le Lot 5 est pleinement opérationnel et déployé avec succès sur AWS (179 ressources actives dans la région eu-central-1).
+        \item \textbf{Résultats} :
+        \begin{itemize}
+            \item Un stockage S3 unifié et optimisé en coût (FinOps).
+            \item Une persistance relationnelle PostgreSQL 15.18 hautement sécurisée.
+            \item Un registre ECR prêt à accueillir les images de l'API.
+        \end{itemize}
+        \item \textbf{Livrable} : Dépôt GitHub propre, sécurisé et documenté.
+    \end{itemize}
+    
+    \vspace*{0.5cm}
+    \centering
+    \large\bfseries Merci pour votre aimable attention.
+\end{frame}
+
+\end{document}

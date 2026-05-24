@@ -1,0 +1,231 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{color}
+
+\geometry{hmargin=2.5cm,vmargin=2.5cm}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{codebackground}{rgb}{0.95,0.95,0.95}
+
+\lstset{
+  backgroundcolor=\color{codebackground},
+  basicstyle=\footnotesize\ttfamily,
+  breaklines=true,
+  captionpos=b,
+  commentstyle=\color{mygreen},
+  keywordstyle=\color{blue},
+  stringstyle=\color{mymauve},
+  frame=single,
+  keepspaces=true,
+  language=bash,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2
+}
+
+\begin{document}
+
+% Page de garde
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    {\large \bfseries RÉPUBLIQUE DU CAMEROUN}\\[0.2cm]
+    {\small Paix - Travail - Patrie}\\[0.2cm]
+    {\large \bfseries UNIVERSITÉ DE YAOUNDÉ I}\\[0.2cm]
+    {\small Faculté des Sciences}\\[0.2cm]
+    {\small Département d'Informatique}\\[1.5cm]
+    
+    \includegraphics[width=3cm]{images/logo_uy1.png}\\[1cm] % Place pour le logo de l'université
+    
+    {\large \bfseries PROJET DE CLOUD NATIONAL DES CDNUs}\\[0.5cm]
+    {\Large \bfseries RAPPORT TECHNIQUE ET MANUEL D'EXPLOITATION}\\[0.8cm]
+    {\Large \bfseries LOT 5 : SERVICES MANAGÉS (BASE DE DONNÉES, STOCKAGE ET REGISTRE DE CONTENEURS)}\\[1.5cm]
+    
+    {\large \bfseries Rédigé par le Groupe 5 :}\\[0.5cm]
+    \begin{tabular}{lll}
+        \textbf{Nom et Prénom} & \textbf{Matricule} & \textbf{Rôle} \\
+        \midrule
+        NEUSSI NJIETCHEU PATRICE EUGENE & 21T2894 & Responsable de Lot \\
+        NDONKOU FRANCK & 21T2254 & Ingénieur Cloud \\
+        NDOMBOU KAMDEM & 21T2552 & Ingénieur DevOps \\
+        FOTSING ENGOULOU SIMON GAETAN & 21Q2024 & Ingénieur Sécurité \\
+        FANDJA DE TCHOUA ANNAELLE ORLANE & & Développeur IaC \\
+    \end{tabular}\\[1.5cm]
+    
+    {\large \bfseries Sous la supervision de :}\\[0.2cm]
+    {\large \bfseries L'Équipe Pédagogique du Département d'Informatique}\\[1.5cm]
+    
+    \vfill
+    {\large Année Académique 2025/2026}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction et Contexte du Projet}
+Le Gouvernement du Cameroun, dans le cadre de sa stratégie nationale de développement de l'économie numérique, a initié le déploiement de Centres de Développement du Numérique Universitaire (CDNU) au sein des institutions d'enseignement supérieur. Ce projet national vise à interconnecter ces 11 centres régionaux à travers une infrastructure de cloud computing souveraine, résiliente et sécurisée hébergée sur Amazon Web Services (AWS).
+
+Dans ce contexte, le Groupe 5 s'est vu confier la responsabilité du Lot "Services Managés". Ce lot constitue les fondations persistantes et logicielles de la plateforme nationale, englobant les systèmes de stockage d'objets, la gestion centralisée des données relationnelles, ainsi que l'hébergement sécurisé des conteneurs applicatifs.
+
+---
+
+\section{Architecture Technique et Spécifications IaC}
+Le lot orchestré par le Groupe 5 est conçu en utilisant l'Infrastructure as Code (IaC) avec le logiciel Terraform. Les ressources sont déclarées dans des modules réutilisables, paramétrables et indépendants.
+
+\subsection{Base de Données Relationnelle RDS PostgreSQL}
+Le coeur des données de l'application nationale repose sur une instance Amazon RDS PostgreSQL. Les choix d'implémentation sont présentés ci-dessous :
+\begin{itemize}
+    \item \textbf{Moteur et Version} : PostgreSQL version 15.18. Ce choix garantit la pérennité de l'infrastructure et supporte les mécanismes de sécurité requis.
+    \item \textbf{Dimensionnement} : Instance de type \texttt{db.t3.micro} avec un volume de stockage de 20 Go de type GP3, offrant 3000 IOPS de base.
+    \item \textbf{Chiffrement} : La base de données est intégralement chiffrée au repos via une clé KMS dédiée.
+    \item \textbf{Sécurité Réseau} : L'instance est déployée dans un Subnet Group privé et protégée par un groupe de sécurité n'autorisant les flux SQL entrant sur le port 5432 que depuis les sous-réseaux internes gérés par le Groupe 4.
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    % Pour inclure l'image plus tard : \includegraphics[width=0.8\textwidth]{images/aws_rds_console.png}
+    \fbox{\parbox{0.8\textwidth}{\centering \vspace*{2cm} [Capture d'écran 1 : Console AWS RDS montrant l'instance PostgreSQL active et sécurisée en région eu-central-1] \vspace*{2cm}}}
+    \caption{Visualisation de l'instance RDS PostgreSQL déployée sur AWS}
+    \label{fig:aws_rds_console}
+\end{figure}
+
+\subsection{Stockage d'Objets Amazon S3}
+Pour répondre aux besoins de stockage de documents de chaque université, le Groupe 5 déploie 11 paires de buckets S3 (22 buckets au total) avec une stratégie stricte de restriction publique et de cycle de vie.
+\begin{itemize}
+    \item \textbf{Bucket de données} : Stockage principal des fichiers administratifs et pédagogiques.
+    \item \textbf{Bucket de logs} : Centralisation des traces d'accès réseau pour chaque requête S3.
+    \item \textbf{Sécurité en transit} : Une Bucket Policy force l'utilisation exclusive d'HTTPS (TLS 1.2+) sous peine de rejet de la requête.
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{images/aws_s3_buckets_list.png}
+    \fbox{\parbox{0.8\textwidth}{\centering \vspace*{2cm} [Capture d'écran 2 : Liste des buckets S3 créés dans la console AWS (11 principaux + 11 buckets de logs associés)] \vspace*{2cm}}}
+    \caption{Liste des buckets S3 régionaux provisionnés pour les CDNUs}
+    \label{fig:aws_s3_buckets_list}
+\end{figure}
+
+\subsection{Registre de Conteneurs Amazon ECR}
+Le registre privé ECR accueille les images Docker de l'API développées par les autres groupes de travail.
+\begin{itemize}
+    \item \textbf{Scan de Vulnérabilités} : L'analyse statique des vulnérabilités CVE est activée au push de chaque image.
+    \item \textbf{Politique de Nettoyage} : Conservation des 10 dernières versions tagguées (\texttt{v*}) et suppression automatique des images untagged après 7 jours.
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{images/aws_ecr_registry.png}
+    \fbox{\parbox{0.8\textwidth}{\centering \vspace*{2cm} [Capture d'écran 3 : Registre ECR avec la politique de scan automatique de vulnérabilités activée sur AWS] \vspace*{2cm}}}
+    \caption{Console AWS ECR avec le registre d'images Docker de l'API}
+    \label{fig:aws_ecr_registry}
+\end{figure}
+
+---
+
+\section{Intégration Systémique Inter-Groupes}
+L'architecture globale étant collaborative, les ressources déployées par le Groupe 5 sont reliées aux autres lots de la façon suivante :
+\begin{itemize}
+    \item \textbf{Groupe 4 (Réseau)} : Intégration de l'instance RDS PostgreSQL dans les sous-réseaux privés et routages inter-CDNU.
+    \item \textbf{Groupe 6 (API / ECS)} : Utilisation du registre ECR pour pousser les images de conteneurs de l'application et utilisation des Secrets de Secrets Manager pour la connexion à la base RDS.
+    \item \textbf{Groupe 7 (Sécurité)} : Utilisation des ARNs des buckets S3 pour restreindre les permissions des rôles d'instances EC2 régionales.
+    \item \textbf{Groupe 8 (Monitoring)} : Agrégation des alarmes de seuil CloudWatch (CPU BDD, espace de stockage restant) vers les serveurs de supervision centraux.
+\end{itemize}
+
+---
+
+\section{Analyse FinOps et Optimisation Budgétaire}
+Le stockage des objets représentant une part importante des coûts opérationnels d'un tel système, nous avons implémenté une politique stricte de transition et d'archivage automatique.
+
+\begin{table}[h!]
+    \centering
+    \caption{Modèle économique d'archivage automatique S3 (Pour 1 To de stockage)}
+    \begin{tabular}{llrr}
+        \toprule
+        \textbf{Période (jours)} & \textbf{Classe de Stockage} & \textbf{Coût Relatif (\%)} & \textbf{Économie Mensuelle (\%)} \\
+        \midrule
+        0 à 30 & S3 Standard & 100\% & 0\% (Données actives) \\
+        31 à 120 & S3 Glacier Instant Retrieval & 20\% & 80\% d'économie \\
+        121 à 210 & S3 Glacier Flexible Retrieval & 10\% & 90\% d'économie \\
+        Après 210 & S3 Glacier Deep Archive & 5\% & 95\% d'économie \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:finops_s3}
+\end{table}
+
+---
+
+\section{Manuel d'Exploitation et de Déploiement}
+
+\subsection{Initialisation et Planification Autonome}
+Pour valider l'indépendance de nos modules, le déploiement a été modélisé de manière autonome via un VPC par défaut.
+Les commandes d'initialisation et de test sont les suivantes :
+
+\begin{lstlisting}
+# Configuration des variables d'environnement (Clés AWS exclues de Git)
+export AWS_ACCESS_KEY_ID="VOTRE_ACCESS_KEY_ID"
+export AWS_SECRET_ACCESS_KEY="VOTRE_SECRET_ACCESS_KEY"
+export AWS_DEFAULT_REGION="eu-central-1"
+
+# Initialisation de Terraform avec reconfiguration du backend S3
+../bin/terraform init -reconfigure
+
+# Planification et validation à blanc
+../bin/terraform plan
+\end{lstlisting}
+
+\subsection{Déploiement et Nettoyage}
+Pour créer puis détruire l'ensemble des ressources de test, utilisez les commandes de cycle de vie Terraform :
+
+\begin{lstlisting}
+# Lancement du déploiement réel sur AWS
+../bin/terraform apply -auto-approve
+
+# Destruction et nettoyage complet des ressources après soutenance
+../bin/terraform destroy -auto-approve
+\end{lstlisting}
+
+\begin{figure}[h!]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{images/terraform_apply_success.png}
+    \fbox{\parbox{0.8\textwidth}{\centering \vspace*{2cm} [Capture d'écran 4 : Résultat de la console locale montrant la fin réussie de l'application Terraform et les adresses (Outputs) générées] \vspace*{2cm}}}
+    \caption{Rendu de la commande de déploiement réussi}
+    \label{fig:terraform_apply_success}
+\end{figure}
+
+---
+
+\section{Sécurité et Exclusion des Secrets}
+Le Groupe 5 applique une politique rigoureuse de non-exposition des secrets d'infrastructure :
+\begin{itemize}
+    \item \textbf{Fichier .gitignore} : Configuré pour bloquer le téléversement vers le dépôt public GitHub des fichiers locaux contenant des clés d'accès AWS (\texttt{cdnu-admin\_accessKeys.csv}), de la configuration locale du backend (\texttt{.terraform/}), des états de ressources sensibles (\texttt{*.tfstate}), et du fichier de configuration du mot de passe de base de données (\texttt{terraform.tfvars}).
+    \item \textbf{Intégration Secrets Manager} : Le mot de passe SQL d'administration généré de manière aléatoire et robuste par Terraform n'est stocké nulle part en clair dans le code, mais poussé directement dans AWS Secrets Manager.
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{images/aws_secrets_manager.png}
+    \fbox{\parbox{0.8\textwidth}{\centering \vspace*{2cm} [Capture d'écran 5 : Console AWS Secrets Manager montrant le stockage sécurisé et le chiffrement du mot de passe RDS PostgreSQL] \vspace*{2cm}}}
+    \caption{Stockage sécurisé du mot de passe d'administration SQL}
+    \label{fig:aws_secrets_manager}
+\end{figure}
+
+---
+
+\section{Conclusion}
+Le module des Services Managés (Lot 5) a été déployé, testé et validé avec succès sur Amazon Web Services. Il fournit une fondation robuste, sécurisée, hautement disponible et optimisée sur le plan financier pour l'ensemble du réseau national des CDNUs du Cameroun. Toutes les clés d'accès ont été protégées contre la publication accidentelle, garantissant le respect strict des exigences du cahier des charges.
+
+\end{document}

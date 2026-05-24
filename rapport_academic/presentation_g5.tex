@@ -70,7 +70,7 @@
                     \item RDS PostgreSQL 15.18
                     \item Stockage GP3 \& Sécurité
                     \item AWS Secrets Manager
-                \end{itemize>
+                \end{itemize}
             \end{block}
         \end{column}
         \begin{column}{0.5\textwidth}
@@ -136,7 +136,7 @@
                     \item \textbf{RDS PostgreSQL} : Base de données SQL centralisée.
                     \item \textbf{Amazon ECR} : Registre privé de conteneurs pour héberger l'API.
                     \item \textbf{AWS Secrets Manager} : Coffre-fort de clés d'accès.
-                \end{itemize>
+                \end{itemize}
             \end{block}
         \end{column}
         \begin{column}{0.5\textwidth}
@@ -145,7 +145,7 @@
                     \item \textbf{Buckets Amazon S3} : Stockage unifié par CDNU.
                     \item \textbf{AWS Backup} : Plan national de sauvegarde inaltérable.
                     \item \textbf{AWS KMS} : Clés de chiffrement souveraines.
-                \end{itemize>
+                \end{itemize}
             \end{block}
         \end{column}
     \end{columns}
@@ -260,7 +260,7 @@ resource "aws_kms_alias" "rds" {
                 \item Restriction du protocole TCP sur le port **5432**.
                 \item Seuls les flux provenant des groupes de sécurité de l'API ECS Fargate (Groupe 6) ou du bastion réseau (Groupe 4) sont acceptés.
                 \item Tout autre trafic interne ou externe est systématiquement bloqué.
-            \end{itemize>
+            \end{itemize}
         \end{itemize}
     \end{block}
 \end{frame}
@@ -317,7 +317,7 @@ resource "aws_secretsmanager_secret_version" "rds_credentials" {
         \begin{itemize}
             \item **Bucket Principal** : Reçoit les cours, thèses, vidéos, documents administratifs de chaque CDNU (ex: \texttt{cdnu-cloud-g5-yaounde-2d425742}).
             \item **Bucket de Logs** : Enregistre de manière inaltérable et isolée toutes les requêtes réseau d'audit (ex: \texttt{cdnu-cloud-g5-yaounde-logs-2d425742}).
-        \end{itemize>
+        \end{itemize}
     \end{itemize}
 \end{frame}
 
@@ -699,7 +699,7 @@ resource "aws_cloudwatch_metric_alarm" "database_cpu" {
             \item Les fichiers locaux d'état Terraform (\texttt{*.tfstate}).
             \item La configuration locale du fournisseur (\texttt{.terraform/}).
         \end{itemize}
-    \end{itemize>
+    \end{itemize}
 \end{frame}
 
 % Slide 40 : Manuel d'Exploitation - Initialisation \& Validation

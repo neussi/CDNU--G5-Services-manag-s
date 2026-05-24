@@ -1,0 +1,27 @@
+# Local .terraform folder
+.terraform/
+
+# Local state files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Sensitive Files & Secrets (CRITICAL SECURITY)
+cdnu-admin_accessKeys.csv
+terraform.tfvars
+terraform.tfvars.json
+
+# Lock files
+.terraform.lock.hcl
+
+# Local history / IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Large binary files
+*.pdf

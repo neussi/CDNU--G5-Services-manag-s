@@ -135,9 +135,8 @@ Le registre privé ECR accueille les images Docker de l'API développées par le
 
 \begin{figure}[h!]
     \centering
-    % \includegraphics[width=0.8\textwidth]{images/aws_ecr_registry.png}
-    \fbox{\parbox{0.8\textwidth}{\centering \vspace*{2cm} [Capture d'écran 3 : Registre ECR avec la politique de scan automatique de vulnérabilités activée sur AWS] \vspace*{2cm}}}
-    \caption{Console AWS ECR avec le registre d'images Docker de l'API}
+    \includegraphics[width=0.9\textwidth]{images/terminal_docker_push.png}
+    \caption{Envoi de l'image Docker de l'API vers le registre Amazon ECR du Groupe 5}
     \label{fig:aws_ecr_registry}
 \end{figure}
 
@@ -177,6 +176,16 @@ Le stockage des objets représentant une part importante des coûts opérationne
 
 \section{Manuel d'Exploitation et de Déploiement}
 
+\subsection{Structure et Architecture des Dossiers G5}
+Afin de maintenir une séparation stricte entre les différents modules de l'infrastructure (base de données et stockage), le Lot 5 est organisé de manière hautement modulaire. La structure physique des répertoires et fichiers Terraform du projet est présentée ci-dessous.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.65\textwidth]{images/terminal_directory_tree.png}
+    \caption{Arborescence physique et organisation du Lot 5 : Services Managés}
+    \label{fig:terminal_directory_tree}
+\end{figure}
+
 \subsection{Initialisation et Planification Autonome}
 Pour valider l'indépendance de nos modules, le déploiement a été modélisé de manière autonome via un VPC par défaut.
 Les commandes d'initialisation et de test sont les suivantes :
@@ -207,10 +216,19 @@ Pour créer puis détruire l'ensemble des ressources de test, utilisez les comma
 
 \begin{figure}[h!]
     \centering
-    % \includegraphics[width=0.8\textwidth]{images/terraform_apply_success.png}
-    \fbox{\parbox{0.8\textwidth}{\centering \vspace*{2cm} [Capture d'écran 4 : Résultat de la console locale montrant la fin réussie de l'application Terraform et les adresses (Outputs) générées] \vspace*{2cm}}}
+    \includegraphics[width=0.9\textwidth]{images/terraform_apply_success.png}
     \caption{Rendu de la commande de déploiement réussi}
     \label{fig:terraform_apply_success}
+\end{figure}
+
+\subsection{Vérification de l'État Réel de l'Infrastructure (Terraform State)}
+Après l'exécution réussie de l'infrastructure, nous pouvons lister en direct l'ensemble des 179 ressources actives et gérées par Terraform via la commande d'état. Cette validation prouve au jury que chaque composant est fonctionnel sur le compte AWS.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/terraform_state_list.png}
+    \caption{Liste nominative des ressources actives dans l'état (State) de Terraform}
+    \label{fig:terraform_state_list}
 \end{figure}
 
 ---

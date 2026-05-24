@@ -86,6 +86,13 @@ Dans ce contexte, le Groupe 5 s'est vu confier la responsabilité du Lot "Servic
 \section{Architecture Technique et Spécifications IaC}
 Le lot orchestré par le Groupe 5 est conçu en utilisant l'Infrastructure as Code (IaC) avec le logiciel Terraform. Les ressources sont déclarées dans des modules réutilisables, paramétrables et indépendants.
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/g5_architecture_diagram.png}
+    \caption{Schéma général d'architecture cloud du Lot 5 : Services Managés}
+    \label{fig:g5_architecture_diagram}
+\end{figure}
+
 \subsection{Base de Données Relationnelle RDS PostgreSQL}
 Le coeur des données de l'application nationale repose sur une instance Amazon RDS PostgreSQL. Les choix d'implémentation sont présentés ci-dessous :
 \begin{itemize}

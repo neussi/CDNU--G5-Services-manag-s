@@ -18,7 +18,7 @@ Le Groupe 5 est responsable du lot "Services Managés". Ce lot regroupe l'ensemb
 ## 2. ARCHITECTURE TECHNIQUE DÉTAILLÉE DES SERVICES MANAGÉS
 
 ### 2.1 Amazon RDS PostgreSQL
-La base de données centrale est déployée sous forme d'instance Amazon RDS PostgreSQL version 15.4. Afin de concilier les contraintes de performance académique et l'optimisation budgétaire, les choix de configuration suivants ont été mis en oeuvre :
+La base de données centrale est déployée sous forme d'instance Amazon RDS PostgreSQL version 15.18. Afin de concilier les contraintes de performance académique et l'optimisation budgétaire, les choix de configuration suivants ont été mis en oeuvre :
 - Classe d'instance : db.t3.micro (2 vCPUs, 1 Go de RAM), extensible vers des classes supérieures (ex. db.m6g) en cas de montée en charge.
 - Stockage : 20 Go de type GP3 avec chiffrement obligatoire au repos via une clé KMS (Key Management Service) gérée par le client. Le type GP3 offre un débit de 3000 IOPS de base sans coût additionnel, ce qui est supérieur au stockage GP2 classique.
 - Haute disponibilité : Support de la topologie Multi-AZ (désactivable via la variable multi_az pour limiter les coûts hors production), permettant la réplication synchrone vers une zone de disponibilité secondaire avec basculement automatique.

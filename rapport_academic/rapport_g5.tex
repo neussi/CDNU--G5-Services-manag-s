@@ -148,10 +148,23 @@ Le module \texttt{database} déploie une instance centralisée Amazon RDS Postgr
 
 \begin{figure}[h!]
     \centering
-    % Pour inclure l'image réelle plus tard : \includegraphics[width=0.85\textwidth]{images/aws_rds_console.png}
-    \fbox{\parbox{0.85\textwidth}{\centering \vspace*{2cm} [Capture d'écran 1 : Console AWS RDS montrant l'instance PostgreSQL active et sécurisée en région eu-central-1] \vspace*{2cm}}}
-    \caption{Visualisation de l'instance RDS PostgreSQL déployée sur AWS}
-    \label{fig:aws_rds_console_main}
+    \includegraphics[width=0.9\textwidth]{images/RDS_interface_list_vide.png}
+    \caption{Console AWS RDS : liste des bases de données vide avant le déploiement}
+    \label{fig:RDS_interface_list_vide}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/terraform_data_base_succes_interface_aws.png}
+    \caption{Console AWS RDS : instance PostgreSQL cdnu-cloud-g5-postgres active après déploiement}
+    \label{fig:terraform_data_base_succes_interface_aws}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/terraform_bd_succes_security_policy.png}
+    \caption{AWS RDS : détails réseau, sous-réseaux privés et règles de sécurité de l'instance}
+    \label{fig:terraform_bd_succes_security_policy}
 \end{figure}
 
 Le listing ci-dessous détaille le code source Terraform déclaré pour provisionner ce module de base de données :
@@ -275,10 +288,23 @@ Le listing ci-dessous présente la politique S3 attachée aux buckets forcing le
 
 \begin{figure}[h!]
     \centering
-    % \includegraphics[width=0.85\textwidth]{images/aws_s3_buckets_list.png}
-    \fbox{\parbox{0.85\textwidth}{\centering \vspace*{2cm} [Capture d'écran 2 : Liste des buckets S3 créés dans la console AWS (11 principaux + 11 buckets de logs associés)] \vspace*{2cm}}}
-    \caption{Liste des buckets S3 régionaux provisionnés pour les CDNUs}
-    \label{fig:aws_s3_buckets_list_main}
+    \includegraphics[width=0.9\textwidth]{images/s3_interface_list_vide.png}
+    \caption{Console AWS S3 : liste des buckets vide avant l'initialisation du stockage}
+    \label{fig:s3_interface_list_vide}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/terraform_23_s3_cree_succes_visible_interface_aws.png}
+    \caption{Console AWS S3 : liste des 23 buckets de stockage et de logs créés avec succès}
+    \label{fig:terraform_23_s3_cree_succes_visible_interface_aws}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/terraform_s3_operationel.png}
+    \caption{AWS S3 : propriétés d'un bucket montrant le chiffrement AES-256 et le blocage d'accès public}
+    \label{fig:terraform_s3_operationel}
 \end{figure}
 
 Le listing ci-dessous détaille le code source Terraform déclaré pour provisionner ce module de stockage :
@@ -415,9 +441,16 @@ Afin d'accueillir et d'héberger les images de conteneurs Docker de l'API applic
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.9\textwidth]{images/terminal_docker_push.png}
-    \caption{Envoi de l'image Docker de l'API vers le registre Amazon ECR du Groupe 5}
-    \label{fig:aws_ecr_registry_main}
+    \includegraphics[width=0.9\textwidth]{images/ECR_interface_list_vide.png}
+    \caption{Console AWS ECR : registre privé de conteneurs vide avant le provisionnement}
+    \label{fig:ECR_interface_list_vide}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/terraform_ERC_cree_succes_visible_interface_aws.png}
+    \caption{Console AWS ECR : registre cdnu-cloud-g5-api créé avec succès et prêt à héberger les conteneurs}
+    \label{fig:terraform_ERC_cree_succes_visible_interface_aws}
 \end{figure}
 
 \subsection{Fichiers Terraform Principaux de la Racine}
@@ -834,13 +867,35 @@ Afin de maintenir une séparation stricte entre les différents modules de l'inf
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.65\textwidth]{images/terminal_directory_tree.png}
-    \caption{Arborescence physique et organisation du Lot 5 : Services Managés}
-    \label{fig:terminal_directory_tree_main}
+    \includegraphics[width=0.45\textwidth]{images/structure_vscode.png}
+    \caption{Structure de l'arborescence Terraform G5 vue depuis VS Code}
+    \label{fig:structure_vscode}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/structure_du_projet_tree.png}
+    \caption{Arborescence physique et organisation des répertoires du Lot 5 via terminal}
+    \label{fig:structure_du_projet_tree}
 \end{figure}
 
 \subsection{Initialisation et Planification Autonome}
 Pour valider l'indépendance de nos modules, le déploiement a été modélisé de manière autonome via un VPC par défaut.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/connexion_aws.png}
+    \caption{Étape 1 : Interface de connexion IAM pour l'administrateur cdnu-admin}
+    \label{fig:connexion_aws}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/connexion_succes_interface.png}
+    \caption{Étape 2 : Page d'accueil de la console AWS après connexion réussie}
+    \label{fig:connexion_succes_interface}
+\end{figure}
+
 Les commandes d'initialisation et de test sont les suivantes :
 
 \begin{lstlisting}
@@ -852,36 +907,56 @@ export AWS_DEFAULT_REGION="eu-central-1"
 # Initialisation de Terraform avec reconfiguration du backend S3
 ../bin/terraform init -reconfigure
 
-# Planification et validation à blanc
+# Planification et validation a blanc
 ../bin/terraform plan
 \end{lstlisting}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/Terraform_Pour_vérifier_si_tout_est_OK.png}
+    \caption{Étape 3 : Exécution réussie de la commande de planification et de validation Terraform}
+    \label{fig:Terraform_Pour_verifier_si_tout_est_OK}
+\end{figure}
+
+Avant de lancer le déploiement, nous validons que le state local est entièrement vierge (0 ressource active), prouvant qu'aucune ressource résiduelle n'affecte notre base de données nationale :
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/terraform_list_vide_au_debut.png}
+    \caption{Étape 4 : Liste d'état Terraform initialement vide (0 ressource)}
+    \label{fig:terraform_list_vide_au_debut}
+\end{figure}
 
 \subsection{Déploiement et Nettoyage}
 Pour créer puis détruire l'ensemble des ressources de test, utilisez les commandes de cycle de vie Terraform :
 
 \begin{lstlisting}
-# Lancement du déploiement réel sur AWS
-../bin/terraform apply -auto-approve
-
-# Destruction et nettoyage complet des ressources après soutenance
-../bin/terraform destroy -auto-approve
+# Lancement du deploiement reel sur AWS
+../bin/terraform apply
 \end{lstlisting}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.9\textwidth]{images/terraform_apply_success.png}
-    \caption{Rendu de la commande de déploiement réussi}
-    \label{fig:terraform_apply_success_main}
+    \includegraphics[width=0.9\textwidth]{images/terraform_apply_yes.png}
+    \caption{Déploiement : Validation interactive avec saisie de la valeur de confirmation `yes`}
+    \label{fig:terraform_apply_yes}
 \end{figure}
 
+Une fois les tests et la soutenance technique achevés, afin de respecter les contraintes de coûts et de libérer proprement les adresses et ressources d'infrastructure privées sur le cloud souverain, nous procédons au nettoyage complet via la commande de destruction :
+
+\begin{lstlisting}
+# Destruction et nettoyage complet des ressources apres soutenance
+../bin/terraform destroy -auto-approve
+\end{lstlisting}
+
 \subsection{Vérification de l'État Réel de l'Infrastructure (Terraform State)}
-Après l'exécution réussie de l'infrastructure, nous pouvons lister en direct l'ensemble des 179 ressources actives et gérées par Terraform via la commande d'état. Cette validation prouve au jury que chaque composant est fonctionnel sur le compte AWS.
+Après l'exécution réussie de l'infrastructure, nous pouvons lister en direct l'ensemble des ressources actives et gérées par Terraform via la commande d'état. Cette validation prouve au jury que chaque composant est fonctionnel sur le compte AWS.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.75\textwidth]{images/terraform_state_list.png}
-    \caption{Liste nominative des ressources actives dans l'état (State) de Terraform}
-    \label{fig:terraform_state_list_main}
+    \includegraphics[width=0.9\textwidth]{images/terraform_list_infra_okey_complet.png}
+    \caption{État final : Liste complète de toutes les ressources actives dans le State de Terraform}
+    \label{fig:terraform_list_infra_okey_complet}
 \end{figure}
 
 ---
@@ -895,14 +970,6 @@ Le Groupe 5 applique une politique rigoureuse de non-exposition des secrets d'in
     \item \textbf{Fichier .gitignore} : Configuré pour bloquer le téléversement vers le dépôt public GitHub des fichiers locaux contenant des clés d'accès AWS (\texttt{cdnu-admin\_accessKeys.csv}), de la configuration locale du backend (\texttt{.terraform/}), des états de ressources sensibles (\texttt{*.tfstate}), et du fichier de configuration du mot de passe de base de données (\texttt{terraform.tfvars}).
     \item \textbf{Intégration Secrets Manager} : Le mot de passe SQL d'administration généré de manière aléatoire et robuste par Terraform n'est stocké nulle part en clair dans le code, mais poussé directement dans AWS Secrets Manager.
 \end{itemize}
-
-\begin{figure}[h!]
-    \centering
-    % \includegraphics[width=0.85\textwidth]{images/aws_secrets_manager.png}
-    \fbox{\parbox{0.85\textwidth}{\centering \vspace*{2cm} [Capture d'écran 5 : Console AWS Secrets Manager montrant le stockage sécurisé et le chiffrement du mot de passe RDS PostgreSQL] \vspace*{2cm}}}
-    \caption{Stockage sécurisé du mot de passe d'administration SQL}
-    \label{fig:aws_secrets_manager_main}
-\end{figure}
 
 ---
 

@@ -171,6 +171,15 @@
     \end{block}
 \end{frame}
 
+% Slide 8b : RDS PostgreSQL - État Initial Vide
+\begin{frame}{RDS PostgreSQL - Console AWS avant Déploiement}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.82\textwidth]{images/RDS_interface_list_vide.png}
+        \caption{Interface de la console AWS RDS : aucune instance de base de données active}
+    \end{figure}
+\end{frame}
+
 % Slide 9 : Code IaC - Provisionnement de la Base RDS (main.tf)
 \begin{frame}[fragile]{Code IaC - Provisionnement de la Base RDS}
     \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
@@ -274,6 +283,24 @@ resource "aws_kms_alias" "rds" {
     \end{itemize}
 \end{frame}
 
+% Slide 14b : RDS PostgreSQL - Instance Active
+\begin{frame}{RDS PostgreSQL - Console AWS après Déploiement}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.82\textwidth]{images/terraform_data_base_succes_interface_aws.png}
+        \caption{Console AWS RDS : instance cdnu-cloud-g5-postgres active et opérationnelle}
+    \end{figure}
+\end{frame}
+
+% Slide 14c : RDS PostgreSQL - Règles de Sécurité
+\begin{frame}{RDS PostgreSQL - Détails et Groupe de Sécurité}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.82\textwidth]{images/terraform_bd_succes_security_policy.png}
+        \caption{Règles de sécurité et configuration réseau de la base de données}
+    \end{figure}
+\end{frame}
+
 % Slide 15 : AWS Secrets Manager - Gestion des Mots de Passe
 \begin{frame}{AWS Secrets Manager - Gestion des Mots de Passe}
     \begin{block}{Cinématique de Sécurisation des Identifiants}
@@ -319,6 +346,15 @@ resource "aws_secretsmanager_secret_version" "rds_credentials" {
             \item **Bucket de Logs** : Enregistre de manière inaltérable et isolée toutes les requêtes réseau d'audit (ex: \texttt{cdnu-cloud-g5-yaounde-logs-2d425742}).
         \end{itemize}
     \end{itemize}
+\end{frame}
+
+% Slide 17b : S3 Buckets - Console AWS avant Déploiement
+\begin{frame}{Amazon S3 - Console AWS avant Déploiement}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.82\textwidth]{images/s3_interface_list_vide.png}
+        \caption{Interface de la console AWS S3 : aucun bucket existant}
+    \end{figure}
 \end{frame}
 
 % Slide 18 : Code IaC - Création de Bucket S3 Principal (storage/main.tf)
@@ -437,6 +473,24 @@ resource "aws_s3_bucket_cors_configuration" "main" {
     \end{block}
 \end{frame}
 
+% Slide 23b : S3 Buckets - Console AWS après Déploiement
+\begin{frame}{Amazon S3 - Console AWS après Déploiement}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.82\textwidth]{images/terraform_23_s3_cree_succes_visible_interface_aws.png}
+        \caption{Liste des 23 buckets créés avec succès pour chacun des CDNUs et leurs logs}
+    \end{figure}
+\end{frame}
+
+% Slide 23c : S3 Buckets - Propriétés Bucket
+\begin{frame}{Amazon S3 - Propriétés et Sécurité Active}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.82\textwidth]{images/terraform_s3_operationel.png}
+        \caption{Propriétés actives d'un bucket : chiffrement SSE-S3 et Block Public Access}
+    \end{figure}
+\end{frame}
+
 % Slide 24 : S3 Buckets - Configuration CORS \& Upload Direct
 \begin{frame}{S3 Buckets - Configuration CORS \& Upload Direct}
     \begin{itemize}
@@ -508,6 +562,15 @@ resource "aws_s3_bucket_intelligent_tiering_configuration" "main" {
     \end{itemize}
 \end{frame}
 
+% Slide 28b : Amazon ECR - Console AWS Vide
+\begin{frame}{Amazon ECR - Console AWS avant Déploiement}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.82\textwidth]{images/ECR_interface_list_vide.png}
+        \caption{Interface de la console AWS ECR : aucun dépôt existant}
+    \end{figure}
+\end{frame}
+
 % Slide 29 : Code IaC - ECR Registry et Scan on Push
 \begin{frame}[fragile]{Code IaC - ECR Registry et Scan on Push}
     \begin{lstlisting}[basicstyle=\tiny\ttfamily,language=bash]
@@ -573,6 +636,15 @@ resource "aws_ecr_lifecycle_policy" "api" {
         \end{itemize}
         \item \textbf{Gain} : Évite l'accumulation d'images intermédiaires inutiles.
     \end{itemize}
+\end{frame}
+
+% Slide 32b : Amazon ECR - Console AWS après Déploiement
+\begin{frame}{Amazon ECR - Console AWS après Déploiement}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.82\textwidth]{images/terraform_ERC_cree_succes_visible_interface_aws.png}
+        \caption{Console AWS ECR : registre privé cdnu-cloud-g5-api prêt pour héberger l'API}
+    \end{figure}
 \end{frame}
 
 % Slide 33 : Code IaC - AWS Backup (backup.tf)
@@ -702,7 +774,43 @@ resource "aws_cloudwatch_metric_alarm" "database_cpu" {
     \end{itemize}
 \end{frame}
 
-% Slide 40 : Manuel d'Exploitation - Initialisation \& Validation
+% Slide 39b : Structure du répertoire sous VS Code
+\begin{frame}{Structure du Projet G5 - Vue VS Code}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.42\textwidth]{images/structure_vscode.png}
+        \caption{Organisation modulaire de l'IaC Terraform G5 dans VS Code}
+    \end{figure}
+\end{frame}
+
+% Slide 39c : Structure du répertoire via Terminal
+\begin{frame}{Structure du Projet G5 - Vue Terminal}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.75\textwidth]{images/structure_du_projet_tree.png}
+        \caption{Arborescence physique complète du Lot 5 visualisée en ligne de commande}
+    \end{figure}
+\end{frame}
+
+% Slide 40 : Manuel d'Exploitation - Authentification AWS
+\begin{frame}{Manuel d'Exploitation - Authentification AWS}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.82\textwidth]{images/connexion_aws.png}
+        \caption{Étape 1 : Saisie des identifiants administratifs cdnu-admin}
+    \end{figure}
+\end{frame}
+
+% Slide 40b : Manuel d'Exploitation - Succès Connexion AWS
+\begin{frame}{Manuel d'Exploitation - Tableau de Bord AWS}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.82\textwidth]{images/connexion_succes_interface.png}
+        \caption{Étape 2 : Accès réussi à la console d'administration AWS}
+    \end{figure}
+\end{frame}
+
+% Slide 40c : Manuel d'Exploitation - Initialisation \& Validation
 \begin{frame}[fragile]{Manuel d'Exploitation - Initialisation \& Validation}
     \begin{block}{Commandes d'initialisation et de test du répertoire G5}
         \begin{lstlisting}[basicstyle=\tiny\ttfamily]
@@ -714,10 +822,28 @@ export AWS_DEFAULT_REGION="eu-central-1"
 # 2. Initialisation de Terraform avec reconfiguration du backend S3
 ../bin/terraform init -reconfigure
 
-# 3. Planification à blanc et validation de la syntaxe
+# 3. Planification a blanc et validation de la syntaxe
 ../bin/terraform plan
         \end{lstlisting}
     \end{block}
+\end{frame}
+
+% Slide 40d : Manuel d'Exploitation - Planification Réussie
+\begin{frame}{Manuel d'Exploitation - Planification Réussie}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.82\textwidth]{images/Terraform_Pour_vérifier_si_tout_est_OK.png}
+        \caption{Étape 3 : Planification sans erreur (terraform plan)}
+    \end{figure}
+\end{frame}
+
+% Slide 40e : Manuel d'Exploitation - State Vide
+\begin{frame}{Manuel d'Exploitation - État Initial Terraform}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.82\textwidth]{images/terraform_list_vide_au_debut.png}
+        \caption{Étape 4 : Validation de la liste d'état vide avant le déploiement}
+    \end{figure}
 \end{frame}
 
 % Slide 41 : Code IaC - Terraform Root Outputs (outputs.tf)
@@ -745,7 +871,7 @@ output "ecr_repository_url" {
     \begin{block}{Commandes d'administration des ressources}
         \begin{lstlisting}[basicstyle=\tiny\ttfamily]
 # 4. Lancement et creation physique de l'infrastructure sur AWS
-../bin/terraform apply -auto-approve
+../bin/terraform apply
 
 # 5. Destruction propre de toutes les ressources pour eviter la facturation apres soutenance
 ../bin/terraform destroy -auto-approve
@@ -756,12 +882,21 @@ output "ecr_repository_url" {
     \end{exampleblock}
 \end{frame}
 
+% Slide 42b : Manuel d'Exploitation - Confirmation Déploiement
+\begin{frame}{Manuel d'Exploitation - Saisie de Confirmation}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.82\textwidth]{images/terraform_apply_yes.png}
+        \caption{Étape 5 : Validation interactive et démarrage du déploiement réel}
+    \end{figure}
+\end{frame}
+
 % Slide 43 : Manuel d'Exploitation - Vérification de l'État Réel
 \begin{frame}{Manuel d'Exploitation - Vérification de l'État Réel}
     \begin{figure}
         \centering
-        \includegraphics[width=0.75\textwidth]{images/terraform_state_list.png}
-        \caption{Visualisation de l'état actif des ressources gérées via Terraform}
+        \includegraphics[width=0.82\textwidth]{images/terraform_list_infra_okey_complet.png}
+        \caption{État Final : 179 ressources déployées avec succès sur AWS}
     \end{figure}
 \end{frame}
 
